@@ -413,7 +413,9 @@ input[type="checkbox"] {
 }
 
 .section {
-  padding: 2.2rem 0;
+  /* Vertical only: shorthand here would wipe out .container's side padding on phones. */
+  padding-top: 2.2rem;
+  padding-bottom: 2.2rem;
 }
 
 .section-head {
