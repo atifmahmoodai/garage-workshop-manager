@@ -40,8 +40,12 @@ npm run smoke    # browser test of the real workflows on desktop, phone and dark
 The app starts with 6 months of realistic demo data (about 160 customers, 1,200 jobs, 3 technicians and 24 stock items). **Settings → Reset demo** regenerates it up to today.
 
 ## Deploy
+This repo is private, and GitHub Pages for private repos needs a paid GitHub plan, so the Pages workflow runs **only when started by hand**. To publish:
+1. Make the repo public (or upgrade your plan).
+2. Settings → Pages → Source: **GitHub Actions**.
+3. Actions → **Deploy…** → Run workflow.
 
-Settings → Pages → Source: **GitHub Actions**. Every push to `main` then tests, builds and publishes it. It also works on any static host (`npm run build`, then serve `dist/`).
+Or deploy anywhere static for free (Netlify, Vercel, Cloudflare Pages): build it and upload the output folder.
 
 ## Before using it with real customers
 
