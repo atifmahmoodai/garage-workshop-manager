@@ -106,7 +106,9 @@ export async function buildApp(config: Config, db: pg.Pool): Promise<FastifyInst
     });
   }
   app.setNotFoundHandler((req, reply) => {
-    if (req.method === "GET" && web && !req.url.startsWith("/api/") && (req.headers.accept ?? "").includes("text/html")) {
+    // Page navigations get the app shell; a missing asset (e.g. /logo.png) stays a 404.
+    const path = req.url.split("?")[0];
+    if (req.method === "GET" && web && !req.url.startsWith("/api/") && ((req.headers.accept ?? "").includes("text/html") || !/\.[a-z0-9]+$/i.test(path))) {
       return reply.header("cache-control", "no-cache").sendFile("index.html", web);
     }
     return reply.status(404).send({ error: "not_found", message: "Not found" });
