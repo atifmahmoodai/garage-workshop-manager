@@ -112,3 +112,13 @@ describe("dates & analytics", () => {
     expect(due.some((d) => booked.has(d.vehicle.id))).toBe(false);
   });
 });
+
+describe("job validation", () => {
+  it("won't cancel an invoiced job", async () => {
+    const { validateJob } = await import("../pages/JobEditor");
+    const d = generateDemoData("2026-09-28");
+    const invoiced = d.jobs.find((j) => j.invoice && !j.invoice.paidAt)!;
+    expect(validateJob({ ...invoiced, status: "Cancelled" }, { invoiced: true }).join(" ")).toMatch(/already invoiced/);
+    expect(validateJob({ ...invoiced, status: "Cancelled" }, { invoiced: false }).join(" ")).not.toMatch(/already invoiced/);
+  });
+});

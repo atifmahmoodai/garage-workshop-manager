@@ -36,9 +36,11 @@ function blankJob(): Job {
 
 export function validateJob(
   j: Job,
-  opts: { newCustomer?: Pick<Customer, "name" | "phone"> | null; newVehicle?: Pick<Vehicle, "plate" | "make" | "model" | "year"> | null },
+  opts: { newCustomer?: Pick<Customer, "name" | "phone"> | null; newVehicle?: Pick<Vehicle, "plate" | "make" | "model" | "year"> | null; invoiced?: boolean },
 ): string[] {
   const e: string[] = [];
+  // An issued invoice is a financial record: cancelling would leave it "unpaid" forever.
+  if (j.status === "Cancelled" && opts.invoiced) e.push("This job is already invoiced, so it can't be cancelled. Give a discount instead.");
   if (!j.customerId && !opts.newCustomer) e.push("Choose a customer.");
   if (opts.newCustomer && opts.newCustomer.name.trim().length < 2) e.push("Enter the new customer's name.");
   if (opts.newCustomer && opts.newCustomer.phone.replace(/\D/g, "").length < 7) e.push("Enter the new customer's phone number.");
@@ -138,7 +140,7 @@ function Editor({ id }: { id?: string }) {
 
   function submit(e: FormEvent) {
     e.preventDefault();
-    const errs = validateJob(draft, { newCustomer, newVehicle });
+    const errs = validateJob(draft, { newCustomer, newVehicle, invoiced: !!original?.invoice });
     setErrors(errs);
     if (errs.length) return;
 
@@ -483,7 +485,9 @@ function Editor({ id }: { id?: string }) {
                 Status
                 <select value={draft.status} disabled={locked} onChange={(e) => set({ status: e.target.value as Job["status"] })}>
                   {JOB_STATUSES.map((s) => (
-                    <option key={s}>{s}</option>
+                    <option key={s} disabled={s === "Cancelled" && !!original?.invoice}>
+                      {s}
+                    </option>
                   ))}
                 </select>
               </label>
