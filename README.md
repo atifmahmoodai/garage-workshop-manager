@@ -2,6 +2,8 @@
 
 A complete front-office app for a small or medium workshop, built around the features garages ask for when they hire developers: job cards, technicians, parts stock, invoicing and service reminders.
 
+**Project guide (PDF):** [docs/PROJECT-GUIDE.pdf](docs/PROJECT-GUIDE.pdf) explains what this project is, the business problem it solves, the client's requirements, and how to build it from scratch, step by step.
+
 ![Workshop board](docs/screenshots/board.png)
 
 | Job card | Invoice | Reports |
